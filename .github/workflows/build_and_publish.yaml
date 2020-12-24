@@ -1,0 +1,38 @@
+name: build and publish
+
+on:
+  push:
+    branches:
+      - trunk
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Build and Publish
+      uses: docker/build-push-action@v1
+      with:
+        username: jakewharton
+        password: ${{ secrets.DOCKER_HUB_TOKEN }}
+        repository: jakewharton/qbt-orphaned-downloads
+        tag_with_ref: true
+        add_git_labels: true
+
+    - name: Extract release notes
+      id: release_notes
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: ffurrer2/extract-release-notes@v1
+
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        body: ${{ steps.release_notes.outputs.release_notes }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

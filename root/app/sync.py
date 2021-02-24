@@ -66,7 +66,7 @@ for torrent in client.torrents.info():
 	if DEBUG:
 		print('Orphaned?', orphaned)
 
-	torrent_tags = torrent.tags.split(',')
+	torrent_tags = torrent.tags.split(', ')
 	if orphaned:
 		if TAG not in torrent_tags:
 			print('Tagging', torrent.name)

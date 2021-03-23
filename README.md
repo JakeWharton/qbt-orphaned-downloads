@@ -71,6 +71,9 @@ For help creating a valid cron specifier, visit [cron.help][cron].
 The 'Orphaned' tag will be used by default.
 To change it, specify your desired tag name in the `QBT_TAG` environment variable.
 
+Tags can be used to prevent specific torrents from being marked as orphans. Specify one or more tags in the
+`QBT_IGNORE_TAGS` as a comma-separated list.
+
 To be notified when sync is failing visit https://healthchecks.io, create a check, and specify
 the ID to the container using the `HEALTHCHECK_ID` environment variable.
 

@@ -8,6 +8,7 @@ ENV \
     HEALTHCHECK_ID="" \
     HEALTHCHECK_HOST="https://hc-ping.com" \
     QBT_TAG="Orphaned" \
+    QBT_IGNORE_TAGS="" \
     QBT_HOST="localhost:8080" \
     QBT_USER="admin" \
     QBT_PASS="adminadmin" \

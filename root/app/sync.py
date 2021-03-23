@@ -26,6 +26,7 @@ for file, stats in file_to_stats.items():
 
 
 TAG = os.environ['QBT_TAG']
+IGNORE_TAGS = filter(None, os.environ['QBT_IGNORE_TAGS'].split(','))
 HOST = os.environ['QBT_HOST']
 USER = os.environ['QBT_USER']
 PASS = os.environ['QBT_PASS']
@@ -67,7 +68,9 @@ for torrent in client.torrents.info():
 		print('Orphaned?', orphaned)
 
 	torrent_tags = torrent.tags.split(', ')
-	if orphaned:
+	has_ignore_tag = any(tag in IGNORE_TAGS for tag in torrent_tags)
+
+	if orphaned and not has_ignore_tag:
 		if TAG not in torrent_tags:
 			print('Tagging', torrent.name)
 			torrent.addTags(TAG)

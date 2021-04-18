@@ -12,6 +12,7 @@ INELIGIBLE_STATES = {
 	TorrentStates.ALLOCATING,
 	TorrentStates.MOVING,
 	TorrentStates.PAUSED_DOWNLOAD,
+	TorrentStates.STALLED_DOWNLOAD,
 }
 
 if DEBUG:

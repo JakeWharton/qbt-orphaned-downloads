@@ -3,6 +3,13 @@
 ## [Unreleased]
 
 
+## [1.2.0] - 2021-04-17
+
+### Changed
+
+ * Do not mark a torrent as an orphan if it is in a downloading or queued state.
+
+
 ## [1.1.0] - 2021-03-23
 
 ### Added
@@ -28,7 +35,8 @@ and to mirror to GitHub's container registry.
 Initial release
 
 
-[Unreleased]: https://github.com/JakeWharton/qbt-orphaned-downloads/compare/1.1.0...HEAD
+[Unreleased]: https://github.com/JakeWharton/qbt-orphaned-downloads/compare/1.2.0...HEAD
+[1.2.0]: https://github.com/JakeWharton/qbt-orphaned-downloads/releases/tag/1.1.0
 [1.1.0]: https://github.com/JakeWharton/qbt-orphaned-downloads/releases/tag/1.1.0
 [1.0.2]: https://github.com/JakeWharton/qbt-orphaned-downloads/releases/tag/1.0.2
 [1.0.1]: https://github.com/JakeWharton/qbt-orphaned-downloads/releases/tag/1.0.1

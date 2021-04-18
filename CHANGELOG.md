@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+ * Add stalled state to ignored states.
+
 
 ## [1.2.0] - 2021-04-17
 

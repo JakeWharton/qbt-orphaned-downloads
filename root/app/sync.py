@@ -1,17 +1,24 @@
 #!/usr/bin/python3 -u
 
 import os
-from qbittorrentapi import Client
+from qbittorrentapi import Client, TorrentStates
 
 DEBUG = os.environ['DEBUG'] == 'true'
 
 DOWNLOADS_PATH = "/downloads"
+INELIGIBLE_STATES = {
+	TorrentStates.QUEUED_DOWNLOAD,
+	TorrentStates.DOWNLOADING,
+	TorrentStates.ALLOCATING,
+	TorrentStates.MOVING,
+	TorrentStates.PAUSED_DOWNLOAD,
+}
 
 if DEBUG:
 	print('Creating inode mappings...')
 
 # Create a map of all downloaded files to their stats (specifically, inode and link count).
-file_to_stats = dict()
+file_to_stats = {}
 for dir_path, _, file_names in os.walk(DOWNLOADS_PATH):
 	for file_name in file_names:
 		full_path = os.path.join(dir_path, file_name)
@@ -20,7 +27,7 @@ for dir_path, _, file_names in os.walk(DOWNLOADS_PATH):
 
 # Reverse file-to-inode map into an inode-to-count map. A file may be hardlinked multiple times in the download
 # directory so a local count is needed to determine if the total count contains external references.
-inode_to_count = dict()
+inode_to_count = {}
 for file, stats in file_to_stats.items():
 	inode_to_count[stats.st_ino] = inode_to_count.get(stats.st_ino, 0) + 1
 
@@ -37,32 +44,37 @@ for torrent in client.torrents.info():
 	if DEBUG:
 		print('---', torrent.name, '---')
 		print('Tags:', torrent.tags)
+		print('State:', torrent.state_enum)
 
-	orphaned = True
-	for file in torrent.files:
-		if file.priority == 0:
-			if DEBUG:
-				print(file.name, "Ignored (priority == 0)")
-			continue  # This file is not set to download. Ignore.
-		if file.progress < 1:
-			if DEBUG:
-				print(file.name, "Ignored (progress < 1)")
-			continue  # This file is not completed and may not have been linked. Ignore.
+	orphaned = False
 
-		if file.name not in file_to_stats:
-			if DEBUG:
-				print(file.name, "Ignored (stats missing)")
-			continue  # Torrent was added after we checked the filesystem. Ignore.
-		stats = file_to_stats[file.name]
+	if torrent.state_enum not in INELIGIBLE_STATES:
+		orphaned = True  # Assume orphaned unless proven otherwise.
 
-		# Determine is this file is an orphan by looking for hardlinks outside of the download directory.
-		download_links = inode_to_count[stats.st_ino]
-		has_external_links = (stats.st_nlink - download_links) > 0
-		if DEBUG:
-			print(file.name, stats.st_ino, stats.st_nlink, download_links, has_external_links)
-		if has_external_links:
-			orphaned = False
-			break
+		for file in torrent.files:
+			if file.priority == 0:
+				if DEBUG:
+					print(file.name, "Ignored (priority == 0)")
+				continue  # This file is not set to download. Ignore.
+			if file.progress < 1:
+				if DEBUG:
+					print(file.name, "Ignored (progress < 1)")
+				continue  # This file is not completed and may not have been linked. Ignore.
+
+			if file.name not in file_to_stats:
+				if DEBUG:
+					print(file.name, "Ignored (stats missing)")
+				continue  # Torrent was added after we checked the filesystem. Ignore.
+			stats = file_to_stats[file.name]
+
+			# Determine is this file is an orphan by looking for hardlinks outside of the download directory.
+			download_links = inode_to_count[stats.st_ino]
+			has_external_links = (stats.st_nlink - download_links) > 0
+			if DEBUG:
+				print(file.name, stats.st_ino, stats.st_nlink, download_links, has_external_links)
+			if has_external_links:
+				orphaned = False
+				break
 
 	if DEBUG:
 		print('Orphaned?', orphaned)

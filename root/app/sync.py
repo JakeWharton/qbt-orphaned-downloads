@@ -103,7 +103,8 @@ for torrent in client.torrents.info():
 print('Done')
 print()
 print('Found', len(unowned_relative_paths), 'unowned files in download directory')
-os.mkdir('/data')
+if not os.path.exists('/data'):
+	os.mkdir('/data')
 with open('/data/unowned.txt.temp', 'w') as w:
 	for unowned_relative_path in sorted(unowned_relative_paths):
 		w.write(unowned_relative_path)

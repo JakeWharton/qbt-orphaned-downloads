@@ -104,5 +104,7 @@ print()
 print('Found', len(unowned_relative_paths), 'unowned files in download directory')
 os.mkdir('/data')
 with open('/data/unowned.txt.temp', 'w') as w:
-	w.writelines(unowned_relative_paths)
+	for unowned_relative_path in unowned_relative_paths:
+		w.write(unowned_relative_path)
+		w.write('\n')
 os.rename('/data/unowned.txt.temp', '/data/unowned.txt')

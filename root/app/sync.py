@@ -100,6 +100,7 @@ for torrent in client.torrents.info():
 			print('Clearing', torrent.name)
 			torrent.removeTags(TAG)
 
+print('Done')
 print()
 print('Found', len(unowned_relative_paths), 'unowned files in download directory')
 os.mkdir('/data')

@@ -2,10 +2,11 @@ qBittorrent Orphaned Downloads
 ==============================
 
 Maintains a tag on torrents whose files have no hardlinks outside the download directory.
+Also maintains a text file of all paths which are unowned by any torrent.
 
 This tool is provided as a Docker container which runs as a cron job.
 
-[![Docker Ima ge Version](https://img.shields.io/docker/v/jakewharton/qbt-orphaned-downloads?sort=semver)][hub]
+[![Docker Image Version](https://img.shields.io/docker/v/jakewharton/qbt-orphaned-downloads?sort=semver)][hub]
 [![Docker Image Size](https://img.shields.io/docker/image-size/jakewharton/qbt-orphaned-downloads)][layers]
 
  [hub]: https://hub.docker.com/r/jakewharton/qbt-orphaned-downloads/
@@ -38,12 +39,15 @@ services:
     # …
 ```
 
-Start this container and point it at your qBittorrent instance with the `QBT_HOST` environment variable and mount your downloads folder at `/downloads`.
+Start this container and point it at your qBittorrent instance with the `QBT_HOST` environment variable.
+Mount your downloads folder at `/downloads`.
+Unowned files will be written to `/data/unowned.txt` which you can optionally mount or simply look at inside the container's filesystem.
 
 ```
 $ docker run -d \
     -e "QBT_HOST=http://qbittorrent:8080" \
     -v /path/to/downloads:/downloads \
+    -v /path/to/data:/data \  # Optional
     jakewharton/qbt-orphaned-downloads:1
 ```
 
@@ -56,6 +60,7 @@ services:
     restart: unless-stopped
     volumes:
       - /path/to/downloads:/downloads
+      - /path/to/data:/data  # Optional
     environment:
       - "QBT_HOST=http://qbittorrent:8080"
 ```

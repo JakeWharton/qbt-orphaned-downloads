@@ -26,6 +26,9 @@ for dir_path, _, file_names in os.walk(DOWNLOADS_PATH):
 		relative_path = os.path.relpath(full_path, DOWNLOADS_PATH)
 		file_to_stats[relative_path] = os.stat(full_path)
 
+# Copy all relative paths to a set which we can mutate as we traverse the torrent list.
+unowned_relative_paths = set(file_to_stats.keys())
+
 # Reverse file-to-inode map into an inode-to-count map. A file may be hardlinked multiple times in the download
 # directory so a local count is needed to determine if the total count contains external references.
 inode_to_count = {}
@@ -46,6 +49,11 @@ for torrent in client.torrents.info():
 		print('---', torrent.name, '---')
 		print('Tags:', torrent.tags)
 		print('State:', torrent.state_enum)
+
+	# Regardless of torrent state, remove all paths known by the torrent.
+	for file in torrent.files:
+		if file.name in unowned_relative_paths:
+			unowned_relative_paths.remove(file.name)
 
 	orphaned = False
 
@@ -91,3 +99,10 @@ for torrent in client.torrents.info():
 		if TAG in torrent_tags:
 			print('Clearing', torrent.name)
 			torrent.removeTags(TAG)
+
+print()
+print('Found', len(unowned_relative_paths), 'unowned files in download directory')
+os.mkdir('/data')
+with open('/data/unowned.txt.temp', 'w') as w:
+	w.writelines(unowned_relative_paths)
+os.rename('/data/unowned.txt.temp', '/data/unowned.txt')

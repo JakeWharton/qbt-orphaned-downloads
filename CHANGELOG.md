@@ -3,6 +3,13 @@
 ## [Unreleased]
 
 
+## [1.3.0] - 2021-07-21
+
+### Added
+
+ * Track files in download directory which are unowned by any torrent. List is written to `/data/unowned.txt`.
+
+
 ## [1.2.1] - 2021-04-18
 
 ### Changed
@@ -42,7 +49,8 @@ and to mirror to GitHub's container registry.
 Initial release
 
 
-[Unreleased]: https://github.com/JakeWharton/qbt-orphaned-downloads/compare/1.2.1...HEAD
+[Unreleased]: https://github.com/JakeWharton/qbt-orphaned-downloads/compare/1.3.0...HEAD
+[1.3.0]: https://github.com/JakeWharton/qbt-orphaned-downloads/releases/tag/1.3.0
 [1.2.1]: https://github.com/JakeWharton/qbt-orphaned-downloads/releases/tag/1.2.1
 [1.2.0]: https://github.com/JakeWharton/qbt-orphaned-downloads/releases/tag/1.2.0
 [1.1.0]: https://github.com/JakeWharton/qbt-orphaned-downloads/releases/tag/1.1.0

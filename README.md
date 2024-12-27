@@ -73,14 +73,22 @@ For help creating a valid cron specifier, visit [cron.help][cron].
 
  [cron]: https://cron.help/#*/5_*_*_*_*
 
-The 'Orphaned' tag will be used by default.
-To change it, specify your desired tag name in the `QBT_TAG` environment variable.
-
-Tags can be used to prevent specific torrents from being marked as orphans. Specify one or more tags in the
-`QBT_IGNORE_TAGS` as a comma-separated list.
-
 To be notified when sync is failing visit https://healthchecks.io, create a check, and specify
 the ID to the container using the `HEALTHCHECK_ID` environment variable.
+
+### Tagging
+
+By default, three tags are maintained: 'Unlinked', 'Linked', and 'Orphaned'.
+Unlinked torrents have never been linked.
+Orphaned torrents have been previously linked.
+This can be used to detect things like newer versions, season packs, etc. as opposed to those which just have not been matched properly.
+
+All three tags can be changed using the `QBT_TAG_UNLINKED`, `QBT_TAG_LINKED`, and `QBT_TAG_ORPHANED` environment variables, respectively.
+
+Alternatively, for a simpler tagging scheme, setting `QBT_SINGLE_TAG=true` will only tag things as 'Orphaned' (using `QBT_TAG_ORPHANED`) when unlinked, and clear that tag when linked.
+
+Tags can be used to prevent specific torrents from being marked by this tool.
+Specify one or more tags in the `QBT_IGNORE_TAGS` as a comma-separated list.
 
 
 LICENSE

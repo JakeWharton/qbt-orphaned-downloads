@@ -73,7 +73,7 @@ for torrent in client.torrents.info():
 			print('[{}]'.format(torrent.name), end=' ')
 		if DELETE_ORPHANS == 'true':
 			print("Deleting orphan!")
-			client.torrents_delete(torrent.info.hash, delete_files=True)
+			client.torrents_delete(True, torrent.info.hash)
 		elif DELETE_ORPHANS == 'log':
 			print("Would delete orphan!")
 

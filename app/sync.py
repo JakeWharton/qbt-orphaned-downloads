@@ -74,8 +74,8 @@ for torrent in client.torrents.info():
 		if DELETE_ORPHANS == 'true':
 			print("Deleting orphan!")
 			client.torrents_delete(torrent.info.hash, delete_files=True)
-		else:
-			print("Would delete orphan! (env var must be 'true')")
+		elif DELETE_ORPHANS == 'log':
+			print("Would delete orphan!")
 
 	has_link = False  # Assume orphaned unless proven otherwise.
 	for file in torrent.files:

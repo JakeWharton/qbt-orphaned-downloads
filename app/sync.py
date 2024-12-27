@@ -22,11 +22,10 @@ file_to_stats = {}
 for dir_path, _, file_names in os.walk(DOWNLOADS_PATH):
 	for file_name in file_names:
 		full_path = os.path.join(dir_path, file_name)
-		relative_path = os.path.relpath(full_path, DOWNLOADS_PATH)
-		file_to_stats[relative_path] = os.stat(full_path)
+		file_to_stats[full_path] = os.stat(full_path)
 
-# Copy all relative paths to a set which we can mutate as we traverse the torrent list.
-unowned_relative_paths = set(file_to_stats.keys())
+# Copy all paths to a set which we can mutate as we traverse the torrent list.
+unowned_paths = set(file_to_stats.keys())
 
 # Reverse file-to-inode map into an inode-to-count map. A file may be hardlinked multiple times in the download
 # directory so a local count is needed to determine if the total count contains external references.
@@ -57,11 +56,12 @@ for torrent in client.torrents.info():
 		print('---', torrent.name, '---')
 		print('Tags:', torrent_tags)
 		print('State:', torrent.state_enum)
+		print('Save path:', torrent.save_path)
 
 	# Regardless of torrent state, remove all paths known by the torrent.
 	for file in torrent.files:
-		if file.name in unowned_relative_paths:
-			unowned_relative_paths.remove(file.name)
+		full_path = os.path.join(torrent.save_path, file.name)
+		unowned_paths.discard(full_path)
 
 	if torrent.state_enum in INELIGIBLE_STATES:
 		if DEBUG:
@@ -88,11 +88,12 @@ for torrent in client.torrents.info():
 				print(file.name, "Ignored (progress < 1)")
 			continue  # This file is not completed and may not have been linked. Ignore.
 
-		if file.name not in file_to_stats:
+		full_path = os.path.join(torrent.save_path, file.name)
+		if full_path not in file_to_stats:
 			if DEBUG:
 				print(file.name, "Ignored (stats missing)")
 			continue  # Torrent was added after we checked the filesystem. Ignore.
-		stats = file_to_stats[file.name]
+		stats = file_to_stats[full_path]
 
 		# Determine is this file is an orphan by looking for hardlinks outside the download directory.
 		download_links = inode_to_count[stats.st_ino]
@@ -129,11 +130,11 @@ for torrent in client.torrents.info():
 
 print('Done')
 print()
-print('Found', len(unowned_relative_paths), 'unowned files in download directory')
+print('Found', len(unowned_paths), 'unowned files in download directory')
 if not os.path.exists('/data'):
 	os.mkdir('/data')
 with open('/data/unowned.txt.temp', 'w') as w:
-	for unowned_relative_path in sorted(unowned_relative_paths):
-		w.write(unowned_relative_path)
+	for unowned_path in sorted(unowned_paths):
+		w.write(unowned_path)
 		w.write('\n')
 os.rename('/data/unowned.txt.temp', '/data/unowned.txt')

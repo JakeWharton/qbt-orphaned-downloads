@@ -6,10 +6,10 @@ Also maintains a text file of all paths which are unowned by any torrent.
 
 This tool is provided as a Docker container which runs as a cron job.
 
-[
-![Docker Image Version](https://img.shields.io/docker/v/jakewharton/qbt-orphaned-downloads?sort=semver)
-![Docker Image Size](https://img.shields.io/docker/image-size/jakewharton/qbt-orphaned-downloads)
-](https://hub.docker.com/r/jakewharton/qbt-orphaned-downloads/)
+[![Docker Image Version](https://img.shields.io/docker/v/jakewharton/qbt-orphaned-downloads?sort=semver)][hub]
+[![Docker Image Size](https://img.shields.io/docker/image-size/jakewharton/qbt-orphaned-downloads)][hub]
+
+ [hub]: https://hub.docker.com/r/jakewharton/qbt-orphaned-downloads/
 
 
 Usage

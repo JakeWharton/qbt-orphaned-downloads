@@ -3,6 +3,10 @@
 ## [Unreleased]
 [Unreleased]: https://github.com/JakeWharton/qbt-orphaned-downloads/compare/2.0.0...HEAD
 
+### Fixed
+
+ * Torrent deletion now actually works (only if enabled!)
+
 
 ## [2.0.0] - 2024-12-27
 [2.0.0]: https://github.com/JakeWharton/qbt-orphaned-downloads/releases/tag/2.0.0

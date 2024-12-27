@@ -7,24 +7,6 @@
 ## [2.0.1] - 2024-12-27
 [2.0.1]: https://github.com/JakeWharton/qbt-orphaned-downloads/releases/tag/2.0.1
 
-The tool now maintains three tags instead of just one.
-This allows differentiating never-linked (unlinked) from those which used to be linked but are no longer (orphaned).
-See the `README.md` for more info.
-
-**NOTE**: Upgrading from 1.x will leave the "Orphaned" tag in place.
-If you want to start with a clean slate, right-click the "Orphaned" tag and select "Remove tag".
-This will cause all unlinked torrents to show as "Unlinked" after the next run.
-
-To revert to the previous behavior of 1.x, set `QBT_SINGLE_TAG=true` environment variable.
-This will only toggle the "Orphaned" tag on or off.
-
-If you would like torrents marked as orphaned to be automatically deleted on the next run, set `QBT_DELETE_ORPHANS=true` environment variable.
-This feature does not work in single-tag mode.
-**WARNING**: This will perform data deletion in an unattended manner.
-Do not use this option if you value your data.
-Every effort has been made to ensure correctness, but please use additional mechanisms which will allow you to recover if something goes horribly wrong (e.g., automatic timed ZFS snapshots).
-You have been warned!
-
 ### Fixed
 
  * Torrent deletion now actually works (only if enabled!)

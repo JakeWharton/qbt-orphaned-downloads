@@ -47,6 +47,7 @@ PASS = os.environ['QBT_PASS']
 
 if DELETE_ORPHANS and SINGLE_TAG_MODE:
 	raise Exception("Orphan deletion cannot be used in single-tag mode")
+deleted = 0
 
 client = Client(host=HOST, username=USER, password=PASS)
 
@@ -74,9 +75,11 @@ for torrent in client.torrents.info():
 		if DELETE_ORPHANS == 'true':
 			print("Deleting orphan!")
 			client.torrents_delete(True, torrent.info.hash)
+			deleted += 1
 			continue  # Do not process further.
 		elif DELETE_ORPHANS == 'log':
 			print("Would delete orphan!")
+			deleted += 1
 			continue  # Pretend we deleted.
 
 	has_link = False  # Assume orphaned unless proven otherwise.
@@ -131,8 +134,13 @@ for torrent in client.torrents.info():
 		torrent.add_tags(add_tag)
 
 print('Done')
-print()
-print('Found', len(unowned_paths), 'unowned files in download directory')
+if deleted or unowned_paths:
+	print()
+	if deleted:
+		print('Deleted', deleted, 'orphaned torrents in client')
+	if unowned_paths:
+		print('Found', len(unowned_paths), 'unowned files in download directory')
+
 if not os.path.exists('/data'):
 	os.mkdir('/data')
 with open('/data/unowned.txt.temp', 'w') as w:

@@ -133,6 +133,8 @@ for torrent in client.torrents.info():
 		print('Adding tag', add_tag)
 		torrent.add_tags(add_tag)
 
+if DEBUG:
+	print('---')
 print('Done')
 if deleted or unowned_paths:
 	print()

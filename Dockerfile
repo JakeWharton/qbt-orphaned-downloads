@@ -1,4 +1,4 @@
-FROM crazymax/alpine-s6:3.20 AS build
+FROM crazymax/alpine-s6:3.20 AS tests
 
 COPY requirements.txt /
 

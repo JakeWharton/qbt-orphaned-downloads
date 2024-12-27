@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+The tool now maintains three tags instead of just one.
+This allows differentiating never-linked (unlinked) from those which used to be linked but are no longer (orphaned).
+
+To revert to the previous behavior, set `QBT_SINGLE_TAG=true` environment variable.
+
 
 ## [1.3.0] - 2021-07-21
 

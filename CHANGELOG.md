@@ -4,8 +4,12 @@
 
 The tool now maintains three tags instead of just one.
 This allows differentiating never-linked (unlinked) from those which used to be linked but are no longer (orphaned).
+See the `README.md` for more info.
 
 To revert to the previous behavior, set `QBT_SINGLE_TAG=true` environment variable.
+
+If you would like orphaned torrents to be automatically deleted on the subsequent pass, set `QBT_DELETE_ORPHANS=true` environment variable.
+This feature does not work in single-tag mode.
 
 
 ## [1.3.0] - 2021-07-21

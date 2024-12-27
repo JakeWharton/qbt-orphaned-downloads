@@ -41,9 +41,13 @@ TAG_ORPHANED: str = os.environ['QBT_TAG_ORPHANED']
 ALL_TAG_SET: set[str] = {TAG_UNLINKED, TAG_LINKED, TAG_ORPHANED}
 IGNORE_TAG_SET: set[str] = set(filter(None, os.environ['QBT_IGNORE_TAGS'].split(',')))
 SINGLE_TAG_MODE: bool = os.environ['QBT_SINGLE_TAG'] == 'true'
+DELETE_ORPHANS: str = os.environ['QBT_DELETE_ORPHANS']
 HOST = os.environ['QBT_HOST']
 USER = os.environ['QBT_USER']
 PASS = os.environ['QBT_PASS']
+
+if DELETE_ORPHANS and SINGLE_TAG_MODE:
+	raise Exception("Orphan deletion cannot be used in single-tag mode")
 
 client = Client(host=HOST, username=USER, password=PASS)
 
@@ -63,6 +67,15 @@ for torrent in client.torrents.info():
 		if DEBUG:
 			print("Ineligible!")
 		continue
+
+	if DELETE_ORPHANS and TAG_ORPHANED in torrent_tags:
+		if not DEBUG:
+			print('[{}]'.format(torrent.name), end=' ')
+		if DELETE_ORPHANS == 'true':
+			print("Deleting orphan!")
+			client.torrents_delete(torrent.info.hash, delete_files=True)
+		else:
+			print("Would delete orphan! (env var must be 'true')")
 
 	has_link = False  # Assume orphaned unless proven otherwise.
 	for file in torrent.files:
@@ -102,10 +115,15 @@ for torrent in client.torrents.info():
 		ignored_tags=IGNORE_TAG_SET,
 		single_tag_mode=SINGLE_TAG_MODE,
 	)
+
 	if remove_tags:
+		if not DEBUG:
+			print('[{}]'.format(torrent.name), end=' ')
 		print('Removing tag(s)', remove_tags)
 		torrent.remove_tags(remove_tags)
 	if add_tag:
+		if not DEBUG:
+			print('[{}]'.format(torrent.name), end=' ')
 		print('Adding tag', add_tag)
 		torrent.add_tags(add_tag)
 

@@ -90,6 +90,13 @@ Alternatively, for a simpler tagging scheme, setting `QBT_SINGLE_TAG=true` will 
 Tags can be used to prevent specific torrents from being marked by this tool.
 Specify one or more tags in the `QBT_IGNORE_TAGS` as a comma-separated list.
 
+If you would like torrents marked as orphaned to be automatically deleted on the next run, set `QBT_DELETE_ORPHANS=true` environment variable.
+This feature does not work in single-tag mode.
+**WARNING**: This will perform data deletion in an unattended manner.
+Do not use this option if you value your data.
+Every effort has been made to ensure correctness, but please use additional mechanisms which will allow you to recover if something goes horribly wrong (e.g., automatic timed ZFS snapshots).
+You have been warned!
+
 
 LICENSE
 ======

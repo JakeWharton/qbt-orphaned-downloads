@@ -1,4 +1,21 @@
-FROM oznu/s6-alpine:3.12
+FROM crazymax/alpine-s6:3.20 AS build
+
+COPY requirements.txt /
+
+RUN apk add --update --no-cache python3 py3-virtualenv py3-pip \
+ && rm -rf /var/cache/* \
+ && mkdir /var/cache/apk \
+ && python3 -m venv .venv \
+ && source .venv/bin/activate \
+ && pip install --no-cache-dir -r requirements.txt
+
+COPY app /app
+COPY etc /etc
+COPY test /test
+RUN python3 -m unittest discover test
+
+
+FROM crazymax/alpine-s6:3.20
 
 ENV \
     # Fail if cont-init scripts exit with non-zero code.
@@ -7,20 +24,24 @@ ENV \
     CRON="0 * * * *" \
     HEALTHCHECK_ID="" \
     HEALTHCHECK_HOST="https://hc-ping.com" \
-    QBT_TAG="Orphaned" \
+    QBT_TAG_UNLINKED="Unlinked" \
+    QBT_TAG_LINKED="Linked" \
+    QBT_TAG_ORPHANED="Orphaned" \
     QBT_IGNORE_TAGS="" \
+    QBT_SINGLE_TAG="false" \
     QBT_HOST="localhost:8080" \
     QBT_USER="admin" \
     QBT_PASS="adminadmin" \
     DEBUG=""
 
 COPY requirements.txt /
-RUN apk add --update --no-cache python3 curl \
+RUN apk add --update --no-cache python3 py3-virtualenv py3-pip \
  && rm -rf /var/cache/* \
  && mkdir /var/cache/apk \
- && ln -sf python3 /usr/bin/python \
- && python -m ensurepip \
- && pip3 install --no-cache-dir --upgrade pip \
- && pip3 install --no-cache-dir -r requirements.txt
+ && python3 -m venv .venv \
+ && source .venv/bin/activate \
+ && pip install --no-cache-dir -r requirements.txt \
+ && apk del py3-pip
 
-COPY root/ /
+COPY app /app
+COPY etc /etc

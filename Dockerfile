@@ -29,6 +29,7 @@ ENV \
     QBT_TAG_ORPHANED="Orphaned" \
     QBT_IGNORE_TAGS="" \
     QBT_SINGLE_TAG="false" \
+    QBT_DELETE_ORPHANS="false" \
     QBT_HOST="localhost:8080" \
     QBT_USER="admin" \
     QBT_PASS="adminadmin" \

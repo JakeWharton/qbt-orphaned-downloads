@@ -80,7 +80,7 @@ the ID to the container using the `HEALTHCHECK_ID` environment variable.
 
 By default, three tags are maintained: 'Unlinked', 'Linked', and 'Orphaned'.
 Unlinked torrents have never been linked.
-Orphaned torrents have been preciously linked.
+Orphaned torrents have been previously linked.
 This can be used to detect things like newer versions, season packs, etc. as opposed to those which just have not been matched properly.
 
 All three tags can be changed using the `QBT_TAG_UNLINKED`, `QBT_TAG_LINKED`, and `QBT_TAG_ORPHANED` environment variables, respectively.

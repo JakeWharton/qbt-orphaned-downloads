@@ -35,13 +35,18 @@ ENV \
     DEBUG=""
 
 COPY requirements.txt /
-RUN apk add --update --no-cache python3 py3-virtualenv py3-pip \
+RUN apk add --update --no-cache \
+      python3 \
+      py3-pip \
+      py3-virtualenv \
  && rm -rf /var/cache/* \
  && mkdir /var/cache/apk \
- && python3 -m venv .venv \
- && source .venv/bin/activate \
+ && python3 -m venv /app/.venv \
+ && source /app/.venv/bin/activate \
  && pip install --no-cache-dir -r requirements.txt \
- && apk del py3-pip
+ && apk del \
+      py3-pip \
+&& true
 
 COPY app /app
 COPY etc /etc

@@ -1,9 +1,6 @@
-#!/usr/bin/python3 -u
-
 import os
 from qbittorrentapi import Client, TorrentStates
-
-from app.logic import diff_tags
+from logic import diff_tags
 
 DEBUG = os.environ['DEBUG'] == 'true'
 
@@ -62,7 +59,9 @@ for torrent in client.torrents.info():
 		if file.name in unowned_relative_paths:
 			unowned_relative_paths.remove(file.name)
 
-	if torrent.state_enum not in INELIGIBLE_STATES:
+	if torrent.state_enum in INELIGIBLE_STATES:
+		if DEBUG:
+			print("Ineligible!")
 		continue
 
 	has_link = False  # Assume orphaned unless proven otherwise.

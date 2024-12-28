@@ -3,6 +3,10 @@
 ## [Unreleased]
 [Unreleased]: https://github.com/JakeWharton/qbt-orphaned-downloads/compare/2.0.2...HEAD
 
+### Fixed
+
+ * Do not crash if `DEBUG` or `QBT_IGNORE_TAGS` env vars are not specified.
+
 
 ## [2.0.2] - 2024-12-27
 [2.0.2]: https://github.com/JakeWharton/qbt-orphaned-downloads/releases/tag/2.0.2

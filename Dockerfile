@@ -2,7 +2,10 @@ FROM alpine:3.20 AS tests
 
 COPY requirements.txt /
 
-RUN apk add --update --no-cache python3 py3-virtualenv py3-pip \
+RUN apk add --update --no-cache \
+      python3 \
+      py3-virtualenv \
+      py3-pip \
  && rm -rf /var/cache/* \
  && mkdir /var/cache/apk \
  && python3 -m venv .venv \
@@ -37,6 +40,7 @@ ENV \
 
 COPY requirements.txt /
 RUN apk add --update --no-cache \
+      curl \
       python3 \
       py3-pip \
       py3-virtualenv \

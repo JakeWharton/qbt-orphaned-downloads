@@ -2,7 +2,7 @@ import os
 from qbittorrentapi import Client, TorrentStates
 from logic import diff_tags
 
-DEBUG = os.environ['DEBUG'] == 'true'
+DEBUG = os.environ.get('DEBUG') == 'true'
 
 DOWNLOADS_PATH = "/downloads"
 INELIGIBLE_STATES = {
@@ -38,7 +38,7 @@ TAG_UNLINKED: str = os.environ['QBT_TAG_UNLINKED']
 TAG_LINKED: str = os.environ['QBT_TAG_LINKED']
 TAG_ORPHANED: str = os.environ['QBT_TAG_ORPHANED']
 ALL_TAG_SET: set[str] = {TAG_UNLINKED, TAG_LINKED, TAG_ORPHANED}
-IGNORE_TAG_SET: set[str] = set(filter(None, os.environ['QBT_IGNORE_TAGS'].split(',')))
+IGNORE_TAG_SET: set[str] = set(filter(None, os.environ.get('QBT_IGNORE_TAGS', default='').split(',')))
 SINGLE_TAG_MODE: bool = os.environ['QBT_SINGLE_TAG'] == 'true'
 DELETE_ORPHANS: str = os.environ['QBT_DELETE_ORPHANS']
 HOST = os.environ['QBT_HOST']

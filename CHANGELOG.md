@@ -3,6 +3,10 @@
 ## [Unreleased]
 [Unreleased]: https://github.com/JakeWharton/qbt-orphaned-downloads/compare/2.0.1...HEAD
 
+### Fixed
+
+ * Re-add `curl` dependency to the Docker container for Healthchecks.io integration.
+
 
 ## [2.0.1] - 2024-12-27
 [2.0.1]: https://github.com/JakeWharton/qbt-orphaned-downloads/releases/tag/2.0.1

@@ -1,4 +1,6 @@
+import datetime
 import os
+import time
 from qbittorrentapi import Client, TorrentStates
 from logic import diff_tags
 
@@ -13,6 +15,8 @@ INELIGIBLE_STATES = {
 	TorrentStates.PAUSED_DOWNLOAD,
 	TorrentStates.STALLED_DOWNLOAD,
 }
+
+SECONDS_IN_WEEK = 7 * 24 * 60 * 60
 
 if DEBUG:
 	print('Creating inode mappings...')
@@ -55,6 +59,7 @@ for torrent in client.torrents.info():
 	torrent_tags: set[str] = set(torrent.tags.split(', '))
 	if DEBUG:
 		print('---', torrent.name, '---')
+		print('Added:', torrent.added_on)
 		print('Tags:', torrent_tags)
 		print('State:', torrent.state_enum)
 		print('Save path:', torrent.save_path)
@@ -72,7 +77,10 @@ for torrent in client.torrents.info():
 	if DELETE_ORPHANS and TAG_ORPHANED in torrent_tags:
 		if not DEBUG:
 			print('[{}]'.format(torrent.name), end=' ')
-		if DELETE_ORPHANS == 'true':
+		until_delete = torrent.added_on + SECONDS_IN_WEEK - int(time.time())
+		if until_delete > 0:
+			print('Will be deleted in', datetime.timedelta(seconds=until_delete))
+		elif DELETE_ORPHANS == 'true':
 			print("Deleting orphan!")
 			client.torrents_delete(True, torrent.info.hash)
 			deleted += 1
@@ -82,7 +90,7 @@ for torrent in client.torrents.info():
 			deleted += 1
 			continue  # Pretend we deleted.
 
-	has_link = False  # Assume orphaned unless proven otherwise.
+	has_link = False  # Assume unlinked unless proven otherwise.
 	for file in torrent.files:
 		if file.priority == 0:
 			if DEBUG:

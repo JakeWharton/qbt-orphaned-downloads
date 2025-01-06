@@ -3,6 +3,13 @@
 ## [Unreleased]
 [Unreleased]: https://github.com/JakeWharton/qbt-orphaned-downloads/compare/2.0.3...HEAD
 
+
+
+## [2.1.0] - 2024-01-06
+[2.1.0]: https://github.com/JakeWharton/qbt-orphaned-downloads/releases/tag/2.1.0
+
+### Changed
+
 * If `QBT_DELETE_ORPHANS=true` is set, wait until a torrent is at least a week old before deleting. This grace period should allow catching accidents and avoid tracker hit-and-run penalties.
 
 

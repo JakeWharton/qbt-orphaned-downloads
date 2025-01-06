@@ -130,16 +130,20 @@ for torrent in client.torrents.info():
 		single_tag_mode=SINGLE_TAG_MODE,
 	)
 
-	if remove_tags:
+	if add_tag or remove_tags:
+		delta=[]
+		if add_tag:
+			delta.append('+' + add_tag)
+		for tag in remove_tags:
+			delta.append('-' + tag)
 		if not DEBUG:
 			print('[{}]'.format(torrent.name), end=' ')
-		print('Removing tag(s)', remove_tags)
-		torrent.remove_tags(remove_tags)
-	if add_tag:
-		if not DEBUG:
-			print('[{}]'.format(torrent.name), end=' ')
-		print('Adding tag', add_tag)
-		torrent.add_tags(add_tag)
+		print(' '.join(delta))
+
+		if remove_tags:
+			torrent.remove_tags(remove_tags)
+		if add_tag:
+			torrent.add_tags(add_tag)
 
 if DEBUG:
 	print('---')

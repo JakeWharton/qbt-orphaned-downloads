@@ -74,22 +74,6 @@ for torrent in client.torrents.info():
 			print("Ineligible!")
 		continue
 
-	if DELETE_ORPHANS and TAG_ORPHANED in torrent_tags:
-		if not DEBUG:
-			print('[{}]'.format(torrent.name), end=' ')
-		until_delete = torrent.added_on + SECONDS_IN_WEEK - int(time.time())
-		if until_delete > 0:
-			print('Will be deleted in', datetime.timedelta(seconds=until_delete))
-		elif DELETE_ORPHANS == 'true':
-			print("Deleting orphan!")
-			client.torrents_delete(True, torrent.info.hash)
-			deleted += 1
-			continue  # Do not process further.
-		elif DELETE_ORPHANS == 'log':
-			print("Would delete orphan!")
-			deleted += 1
-			continue  # Pretend we deleted.
-
 	has_link = False  # Assume unlinked unless proven otherwise.
 	for file in torrent.files:
 		if file.priority == 0:
@@ -119,6 +103,22 @@ for torrent in client.torrents.info():
 
 	if DEBUG:
 		print('Linked?', has_link)
+
+	if not has_link and DELETE_ORPHANS and TAG_ORPHANED in torrent_tags:
+		if not DEBUG:
+			print('[{}]'.format(torrent.name), end=' ')
+		until_delete = torrent.added_on + SECONDS_IN_WEEK - int(time.time())
+		if until_delete > 0:
+			print('Will be deleted in', datetime.timedelta(seconds=until_delete))
+		elif DELETE_ORPHANS == 'true':
+			print("Deleting orphan!")
+			client.torrents_delete(True, torrent.info.hash)
+			deleted += 1
+			continue  # Do not process further.
+		elif DELETE_ORPHANS == 'log':
+			print("Would delete orphan!")
+			deleted += 1
+			continue  # Pretend we deleted.
 
 	(add_tag, remove_tags) = diff_tags(
 		torrent_tags=torrent_tags,

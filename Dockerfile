@@ -51,7 +51,7 @@ RUN apk add --update --no-cache \
  && pip install --no-cache-dir -r requirements.txt \
  && apk del \
       py3-pip \
-&& true
+ && true
 
 COPY app /app
 COPY etc /etc

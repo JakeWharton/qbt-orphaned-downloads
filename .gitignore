@@ -1,5 +1,4 @@
 # IntelliJ IDEA
 .idea
-*.iml
 /.venv
 /venv

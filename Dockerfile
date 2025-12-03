@@ -1,4 +1,4 @@
-FROM alpine:3.22 AS tests
+FROM alpine:3.23 AS tests
 
 COPY requirements.txt /
 

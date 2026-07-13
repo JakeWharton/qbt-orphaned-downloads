@@ -18,7 +18,7 @@ COPY test /test
 RUN python3 -m unittest discover test
 
 
-FROM crazymax/alpine-s6:3.23
+FROM crazymax/alpine-s6:3.24
 
 ENV \
     # Fail if cont-init scripts exit with non-zero code.
